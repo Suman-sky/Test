@@ -1,0 +1,1301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VOIDX — GG or Die</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  /* ── TOKENS ── */
+  :root {
+    --void: #04040a;
+    --deep: #080818;
+    --panel: rgba(12,8,35,0.72);
+    --neon-blue: #00d4ff;
+    --neon-purple: #a855f7;
+    --neon-pink: #ff2d78;
+    --gold: #f5c842;
+    --text: #c8cce8;
+    --muted: #5a5f7a;
+    --glass: rgba(255,255,255,0.04);
+    --glass-border: rgba(168,85,247,0.22);
+    --glow-blue: 0 0 20px rgba(0,212,255,0.45), 0 0 60px rgba(0,212,255,0.15);
+    --glow-purple: 0 0 20px rgba(168,85,247,0.55), 0 0 60px rgba(168,85,247,0.2);
+    --font-display: 'Orbitron', monospace;
+    --font-mono: 'Share Tech Mono', monospace;
+    --font-body: 'Inter', sans-serif;
+  }
+
+  /* ── RESET ── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--void);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+  a { color: inherit; text-decoration: none; }
+  img { max-width: 100%; }
+
+  /* ── BACKGROUND GRID ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 0;
+    background-image:
+      linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+  }
+  body::after {
+    content: '';
+    position: fixed; inset: 0; z-index: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(168,85,247,0.12), transparent),
+                radial-gradient(ellipse 60% 40% at 100% 80%, rgba(0,212,255,0.07), transparent);
+    pointer-events: none;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 5vw;
+    height: 64px;
+    background: rgba(4,4,10,0.85);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(168,85,247,0.15);
+  }
+  .nav-logo {
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: 1.3rem;
+    letter-spacing: 0.1em;
+    background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .nav-links {
+    display: flex; gap: 2rem; list-style: none;
+    font-family: var(--font-mono); font-size: 0.78rem; letter-spacing: 0.08em;
+  }
+  .nav-links a {
+    color: var(--muted); transition: color 0.2s;
+    text-transform: uppercase;
+  }
+  .nav-links a:hover { color: var(--neon-blue); }
+  .nav-cta {
+    font-family: var(--font-mono); font-size: 0.78rem;
+    padding: 0.45rem 1.2rem;
+    border: 1px solid var(--neon-blue);
+    color: var(--neon-blue);
+    border-radius: 2px;
+    letter-spacing: 0.1em;
+    transition: background 0.2s, box-shadow 0.2s;
+  }
+  .nav-cta:hover { background: rgba(0,212,255,0.1); box-shadow: var(--glow-blue); }
+  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+  .hamburger span { width: 24px; height: 2px; background: var(--neon-blue); transition: all 0.3s; }
+
+  /* ── SECTIONS SHARED ── */
+  section { position: relative; z-index: 1; padding: 100px 5vw; }
+  .section-label {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.25em;
+    color: var(--neon-blue);
+    text-transform: uppercase;
+    margin-bottom: 0.6rem;
+    display: flex; align-items: center; gap: 0.8rem;
+  }
+  .section-label::before {
+    content: '';
+    display: inline-block; width: 28px; height: 1px; background: var(--neon-blue);
+  }
+  .section-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.6rem, 3vw, 2.4rem);
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.04em;
+    margin-bottom: 3rem;
+  }
+  .section-title span {
+    background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+
+  /* ── GLASS CARD ── */
+  .glass {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(20px);
+    border-radius: 6px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+  .glass:hover {
+    border-color: rgba(168,85,247,0.5);
+    box-shadow: 0 0 30px rgba(168,85,247,0.12);
+  }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    display: flex; align-items: center;
+    padding-top: 64px;
+    gap: 6vw;
+  }
+  .hero-left { flex: 1; max-width: 560px; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    font-family: var(--font-mono); font-size: 0.72rem;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--neon-blue);
+    border: 1px solid rgba(0,212,255,0.3);
+    padding: 0.4rem 0.9rem;
+    border-radius: 2px;
+    margin-bottom: 1.8rem;
+    background: rgba(0,212,255,0.05);
+  }
+  .hero-badge::before { content: '●'; font-size: 0.5rem; animation: blink 1.4s infinite; }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+  .hero-tag {
+    font-family: var(--font-display);
+    font-size: clamp(2.8rem, 7vw, 5.5rem);
+    font-weight: 900;
+    line-height: 0.95;
+    letter-spacing: -0.01em;
+    color: #fff;
+    margin-bottom: 1rem;
+  }
+  .hero-tag .accent {
+    display: block;
+    background: linear-gradient(135deg, var(--neon-blue) 0%, var(--neon-purple) 60%, var(--neon-pink) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 30px rgba(168,85,247,0.5));
+  }
+  .hero-tagline {
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+    margin-bottom: 2.5rem;
+    max-width: 400px;
+  }
+  .hero-tagline em { color: var(--neon-purple); font-style: normal; }
+  .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn-primary {
+    font-family: var(--font-mono); font-size: 0.82rem; letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.8rem 2rem;
+    background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+    color: #fff; border-radius: 2px; border: none; cursor: pointer;
+    box-shadow: 0 0 24px rgba(0,212,255,0.3);
+    transition: box-shadow 0.3s, transform 0.2s;
+  }
+  .btn-primary:hover { box-shadow: var(--glow-blue); transform: translateY(-2px); }
+  .btn-outline {
+    font-family: var(--font-mono); font-size: 0.82rem; letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.8rem 2rem;
+    border: 1px solid var(--glass-border);
+    color: var(--text); border-radius: 2px; cursor: pointer;
+    background: var(--glass); backdrop-filter: blur(10px);
+    transition: border-color 0.3s, color 0.3s;
+  }
+  .btn-outline:hover { border-color: var(--neon-purple); color: var(--neon-purple); }
+
+  .hero-right {
+    flex-shrink: 0; position: relative;
+    width: clamp(260px, 32vw, 400px);
+  }
+  .hero-avatar-ring {
+    position: relative; width: 100%; padding-bottom: 100%;
+    border-radius: 50%;
+  }
+  .hero-avatar-ring::before {
+    content: '';
+    position: absolute; inset: -3px;
+    border-radius: 50%;
+    background: conic-gradient(from 0deg, var(--neon-blue), var(--neon-purple), var(--neon-pink), var(--neon-blue));
+    animation: spin 6s linear infinite;
+    z-index: 0;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .hero-avatar-ring::after {
+    content: '';
+    position: absolute; inset: 3px;
+    border-radius: 50%;
+    background: var(--void);
+    z-index: 1;
+  }
+  .hero-avatar {
+    position: absolute; inset: 8px;
+    border-radius: 50%;
+    overflow: hidden; z-index: 2;
+    background: linear-gradient(135deg, rgba(0,212,255,0.15), rgba(168,85,247,0.25));
+    display: flex; align-items: center; justify-content: center;
+  }
+  .hero-avatar svg { width: 65%; height: 65%; opacity: 0.6; }
+  .hero-stats-float {
+    position: absolute; bottom: -20px; left: -40px;
+    display: flex; flex-direction: column; gap: 0.6rem;
+    z-index: 10;
+  }
+  .stat-chip {
+    display: flex; align-items: center; gap: 0.7rem;
+    padding: 0.55rem 1rem;
+    background: rgba(8,8,24,0.9);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(12px);
+    border-radius: 4px;
+    font-family: var(--font-mono); font-size: 0.78rem;
+    animation: floatUp 3s ease-in-out infinite;
+  }
+  .stat-chip:nth-child(2) { animation-delay: 1s; }
+  .stat-chip:nth-child(3) { animation-delay: 2s; }
+  @keyframes floatUp { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
+  .stat-chip .val { color: var(--neon-blue); font-weight: bold; font-size: 1rem; }
+  .stat-chip .lbl { color: var(--muted); font-size: 0.66rem; letter-spacing: 0.1em; }
+  .stat-group { display: flex; flex-direction: column; }
+
+  /* ── ABOUT ── */
+  #about { background: none; }
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+  .about-card {
+    padding: 2.5rem;
+    position: relative; overflow: hidden;
+  }
+  .about-card::before {
+    content: attr(data-num);
+    position: absolute; top: -0.5rem; right: 1rem;
+    font-family: var(--font-display); font-size: 5rem; font-weight: 900;
+    color: rgba(168,85,247,0.07); line-height: 1; pointer-events: none;
+    letter-spacing: -0.05em;
+  }
+  .about-card h3 {
+    font-family: var(--font-display); font-size: 0.85rem;
+    letter-spacing: 0.15em; color: var(--neon-blue); text-transform: uppercase;
+    margin-bottom: 0.8rem;
+  }
+  .about-card p { color: var(--text); font-size: 0.95rem; line-height: 1.7; }
+  .about-card strong { color: var(--neon-purple); }
+
+  /* ── GAMES ── */
+  #games { background: none; }
+  .games-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; }
+  .game-card {
+    padding: 1.8rem 1.4rem; text-align: center; cursor: default;
+    position: relative; overflow: hidden;
+  }
+  .game-card::after {
+    content: ''; position: absolute;
+    bottom: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--neon-blue), transparent);
+    transform: scaleX(0); transition: transform 0.4s;
+  }
+  .game-card:hover::after { transform: scaleX(1); }
+  .game-icon {
+    width: 60px; height: 60px; margin: 0 auto 1rem;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.8rem;
+    background: rgba(168,85,247,0.1);
+    border: 1px solid rgba(168,85,247,0.2);
+  }
+  .game-name {
+    font-family: var(--font-display); font-size: 0.82rem; font-weight: 700;
+    color: #fff; letter-spacing: 0.08em; margin-bottom: 0.3rem;
+  }
+  .game-rank {
+    font-family: var(--font-mono); font-size: 0.72rem;
+    color: var(--neon-blue); letter-spacing: 0.1em;
+  }
+  .game-hours {
+    font-family: var(--font-mono); font-size: 0.68rem;
+    color: var(--muted); margin-top: 0.3rem;
+  }
+
+  /* ── STATS ── */
+  #stats { background: linear-gradient(180deg, transparent, rgba(0,212,255,0.03), transparent); }
+  .stats-main { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; margin-bottom: 3rem; }
+  .stat-big {
+    padding: 2.5rem 2rem; text-align: center;
+  }
+  .stat-big .num {
+    font-family: var(--font-display); font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 900; color: #fff; line-height: 1;
+    background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .stat-big .unit { font-family: var(--font-mono); font-size: 0.75rem; color: var(--muted); display: block; margin-top: 0.3rem; letter-spacing: 0.1em; }
+  .stat-big .label { font-family: var(--font-mono); font-size: 0.7rem; color: var(--muted); letter-spacing: 0.15em; text-transform: uppercase; margin-top: 0.5rem; }
+
+  .stats-bars { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .bar-row { padding: 1.5rem 2rem; }
+  .bar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; }
+  .bar-label { font-family: var(--font-mono); font-size: 0.78rem; color: var(--text); letter-spacing: 0.05em; }
+  .bar-val { font-family: var(--font-mono); font-size: 0.78rem; color: var(--neon-blue); }
+  .bar-track { height: 4px; background: rgba(255,255,255,0.07); border-radius: 2px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 2px; background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple)); transition: width 1s ease; }
+
+  /* ── ACHIEVEMENTS ── */
+  #achievements { }
+  .ach-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
+  .ach-card {
+    padding: 1.6rem 1.8rem;
+    display: flex; align-items: flex-start; gap: 1.2rem;
+  }
+  .ach-icon {
+    flex-shrink: 0;
+    width: 48px; height: 48px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem;
+    border: 1px solid rgba(245,200,66,0.3);
+    background: rgba(245,200,66,0.07);
+  }
+  .ach-icon.platinum { border-color: rgba(168,85,247,0.5); background: rgba(168,85,247,0.1); }
+  .ach-icon.rare { border-color: rgba(0,212,255,0.5); background: rgba(0,212,255,0.08); }
+  .ach-text h4 {
+    font-family: var(--font-display); font-size: 0.82rem;
+    font-weight: 700; color: #fff; letter-spacing: 0.05em;
+    margin-bottom: 0.3rem;
+  }
+  .ach-text p { font-size: 0.82rem; color: var(--muted); line-height: 1.5; }
+  .ach-rarity {
+    font-family: var(--font-mono); font-size: 0.65rem;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    margin-top: 0.4rem;
+  }
+  .rarity-gold { color: var(--gold); }
+  .rarity-platinum { color: var(--neon-purple); }
+  .rarity-rare { color: var(--neon-blue); }
+
+  /* ── SKILLS ── */
+  #skills { }
+  .skills-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; }
+  .playstyle-tags { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-bottom: 2rem; }
+  .tag {
+    font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.1em;
+    text-transform: uppercase; padding: 0.35rem 0.85rem;
+    border-radius: 2px;
+  }
+  .tag-blue { border: 1px solid rgba(0,212,255,0.4); color: var(--neon-blue); background: rgba(0,212,255,0.07); }
+  .tag-purple { border: 1px solid rgba(168,85,247,0.4); color: var(--neon-purple); background: rgba(168,85,247,0.07); }
+  .tag-pink { border: 1px solid rgba(255,45,120,0.4); color: var(--neon-pink); background: rgba(255,45,120,0.07); }
+  .skill-list { display: flex; flex-direction: column; gap: 1.2rem; }
+  .skill-item {}
+  .skill-header { display: flex; justify-content: space-between; margin-bottom: 0.5rem; }
+  .skill-name { font-family: var(--font-mono); font-size: 0.82rem; color: var(--text); }
+  .skill-pct { font-family: var(--font-mono); font-size: 0.78rem; color: var(--neon-purple); }
+  .skill-bar { height: 3px; background: rgba(255,255,255,0.06); border-radius: 2px; }
+  .skill-fill { height: 100%; border-radius: 2px; background: linear-gradient(90deg, var(--neon-purple), var(--neon-pink)); }
+
+  .radar-wrap { display: flex; align-items: center; justify-content: center; padding: 2rem; }
+  .radar-wrap svg { max-width: 260px; }
+
+  /* ── SETUP ── */
+  #setup { }
+  .setup-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1rem; }
+  .setup-item { padding: 1.8rem; }
+  .setup-cat {
+    font-family: var(--font-mono); font-size: 0.68rem;
+    letter-spacing: 0.2em; color: var(--neon-blue); text-transform: uppercase;
+    margin-bottom: 0.8rem;
+  }
+  .setup-name { font-family: var(--font-display); font-size: 0.92rem; font-weight: 700; color: #fff; margin-bottom: 0.4rem; }
+  .setup-spec { font-size: 0.82rem; color: var(--muted); line-height: 1.5; }
+
+  /* ── GALLERY ── */
+  #gallery { }
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: 180px;
+    gap: 6px;
+  }
+  .gallery-item {
+    overflow: hidden; border-radius: 4px;
+    position: relative; cursor: pointer;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+  }
+  .gallery-item:nth-child(1), .gallery-item:nth-child(5) { grid-column: span 2; grid-row: span 2; }
+  .gallery-thumb {
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2rem;
+    background: linear-gradient(135deg, rgba(0,212,255,0.06) 0%, rgba(168,85,247,0.1) 100%);
+    transition: transform 0.4s ease;
+    flex-direction: column; gap: 0.6rem;
+  }
+  .gallery-item:hover .gallery-thumb { transform: scale(1.06); }
+  .gallery-thumb span { font-family: var(--font-mono); font-size: 0.72rem; color: var(--muted); }
+  .gallery-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(0deg, rgba(4,4,10,0.8) 0%, transparent 60%);
+    opacity: 0; transition: opacity 0.3s;
+    display: flex; align-items: flex-end; padding: 1rem;
+  }
+  .gallery-item:hover .gallery-overlay { opacity: 1; }
+  .gallery-overlay p { font-family: var(--font-mono); font-size: 0.72rem; color: var(--neon-blue); letter-spacing: 0.1em; }
+
+  /* ── TOURNAMENTS ── */
+  #tournaments { }
+  .tourney-list { display: flex; flex-direction: column; gap: 0.6rem; }
+  .tourney-row {
+    display: grid; grid-template-columns: auto 1fr auto auto;
+    align-items: center; gap: 1.5rem;
+    padding: 1.2rem 1.8rem;
+    transition: border-color 0.3s;
+  }
+  .tourney-row:hover { border-color: rgba(168,85,247,0.4); }
+  .tourney-place {
+    font-family: var(--font-display); font-size: 1.2rem; font-weight: 900;
+    width: 42px; text-align: center;
+  }
+  .place-1 { color: var(--gold); text-shadow: 0 0 20px rgba(245,200,66,0.5); }
+  .place-2 { color: #c0c0d0; }
+  .place-3 { color: #cd7f32; }
+  .place-x { color: var(--muted); font-size: 0.9rem; }
+  .tourney-name { font-family: var(--font-display); font-size: 0.85rem; font-weight: 700; color: #fff; }
+  .tourney-game { font-family: var(--font-mono); font-size: 0.72rem; color: var(--muted); margin-top: 0.2rem; }
+  .tourney-date { font-family: var(--font-mono); font-size: 0.72rem; color: var(--muted); text-align: right; }
+  .tourney-prize { font-family: var(--font-mono); font-size: 0.82rem; color: var(--neon-blue); text-align: right; font-weight: bold; }
+
+  /* ── SCHEDULE ── */
+  #schedule { }
+  .schedule-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.6rem; }
+  .day-card { padding: 1.2rem 0.8rem; text-align: center; }
+  .day-name { font-family: var(--font-display); font-size: 0.65rem; letter-spacing: 0.15em; color: var(--muted); text-transform: uppercase; margin-bottom: 0.6rem; }
+  .day-card.active { border-color: rgba(0,212,255,0.4); background: rgba(0,212,255,0.05); }
+  .day-card.active .day-name { color: var(--neon-blue); }
+  .day-time { font-family: var(--font-mono); font-size: 0.78rem; color: var(--text); margin-bottom: 0.4rem; }
+  .day-game { font-size: 0.72rem; color: var(--muted); }
+  .day-dot { width: 6px; height: 6px; border-radius: 50%; margin: 0.6rem auto 0; }
+  .dot-on { background: var(--neon-blue); box-shadow: 0 0 8px var(--neon-blue); }
+  .dot-off { background: rgba(255,255,255,0.1); }
+  .stream-info { display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; }
+  .stream-badge {
+    display: flex; align-items: center; gap: 0.6rem;
+    padding: 0.7rem 1.2rem;
+    background: rgba(145,70,255,0.1);
+    border: 1px solid rgba(145,70,255,0.3);
+    border-radius: 4px;
+    font-family: var(--font-mono); font-size: 0.78rem; color: var(--text);
+  }
+  .stream-badge .dot { width: 8px; height: 8px; border-radius: 50%; background: #ff0000; box-shadow: 0 0 8px #ff0000; animation: blink 1.2s infinite; }
+
+  /* ── SOCIAL ── */
+  #social { text-align: center; }
+  .social-grid { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-bottom: 3rem; }
+  .social-card {
+    display: flex; flex-direction: column; align-items: center; gap: 0.6rem;
+    padding: 1.5rem 2rem; min-width: 140px; cursor: pointer;
+    transition: transform 0.2s;
+  }
+  .social-card:hover { transform: translateY(-4px); }
+  .social-icon { font-size: 1.8rem; }
+  .social-name { font-family: var(--font-display); font-size: 0.72rem; letter-spacing: 0.12em; color: var(--muted); }
+  .social-handle { font-family: var(--font-mono); font-size: 0.82rem; color: var(--neon-blue); }
+
+  /* ── CONTACT ── */
+  #contact { }
+  .contact-inner { max-width: 600px; }
+  .contact-form { display: flex; flex-direction: column; gap: 1rem; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .form-group { display: flex; flex-direction: column; gap: 0.5rem; }
+  .form-group label { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.12em; color: var(--muted); text-transform: uppercase; }
+  .form-group input, .form-group textarea, .form-group select {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(168,85,247,0.2);
+    color: var(--text);
+    padding: 0.8rem 1rem;
+    border-radius: 4px;
+    font-family: var(--font-mono); font-size: 0.85rem;
+    outline: none; resize: none;
+    transition: border-color 0.2s;
+  }
+  .form-group input:focus, .form-group textarea:focus {
+    border-color: var(--neon-blue);
+    box-shadow: 0 0 0 2px rgba(0,212,255,0.08);
+  }
+  .form-group textarea { height: 120px; }
+  .form-group select option { background: var(--deep); }
+
+  /* ── FOOTER ── */
+  footer {
+    position: relative; z-index: 1;
+    padding: 2rem 5vw;
+    border-top: 1px solid rgba(168,85,247,0.12);
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: gap;
+    gap: 1rem;
+  }
+  .footer-logo { font-family: var(--font-display); font-weight: 900; font-size: 1.1rem; letter-spacing: 0.1em; color: var(--muted); }
+  .footer-copy { font-family: var(--font-mono); font-size: 0.72rem; color: var(--muted); }
+  .footer-glyph { font-family: var(--font-mono); font-size: 0.72rem; color: rgba(168,85,247,0.4); letter-spacing: 0.2em; }
+
+  /* ── DIVIDER ── */
+  .neon-divider {
+    width: 100%; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(0,212,255,0.3), rgba(168,85,247,0.3), transparent);
+    margin: 0;
+  }
+
+  /* ── SCROLL REVEAL ── */
+  .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  /* ── SCANLINE OVERLAY ── */
+  .scanline {
+    position: fixed; inset: 0; z-index: 999; pointer-events: none;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.04) 2px, rgba(0,0,0,0.04) 4px);
+    opacity: 0.4;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    #hero { flex-direction: column; text-align: center; padding-top: 100px; }
+    .hero-right { width: clamp(180px, 55vw, 300px); }
+    .hero-stats-float { position: static; flex-direction: row; justify-content: center; flex-wrap: wrap; }
+    .hero-actions { justify-content: center; }
+    .about-grid { grid-template-columns: 1fr; }
+    .stats-main { grid-template-columns: repeat(2, 1fr); }
+    .stats-bars { grid-template-columns: 1fr; }
+    .skills-layout { grid-template-columns: 1fr; }
+    .gallery-grid { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 140px; }
+    .gallery-item:nth-child(1), .gallery-item:nth-child(5) { grid-column: span 2; }
+    .schedule-grid { grid-template-columns: repeat(4, 1fr); }
+    .nav-links, .nav-cta { display: none; }
+    .hamburger { display: flex; }
+    .tourney-row { grid-template-columns: auto 1fr; }
+    .tourney-date, .tourney-prize { display: none; }
+    .form-row { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 560px) {
+    section { padding: 70px 5vw; }
+    .stats-main { grid-template-columns: repeat(2, 1fr); }
+    .schedule-grid { grid-template-columns: repeat(3, 1fr); }
+    .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+    .gallery-item:nth-child(1) { grid-column: span 2; }
+    .gallery-item:nth-child(5) { grid-column: span 1; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition-duration: 0.01ms !important; }
+  }
+
+  /* ── MOBILE MENU ── */
+  .mobile-menu {
+    display: none; position: fixed; top: 64px; left: 0; right: 0; z-index: 99;
+    background: rgba(4,4,10,0.97); backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(168,85,247,0.15);
+    padding: 1.5rem 5vw;
+    flex-direction: column; gap: 1rem;
+  }
+  .mobile-menu.open { display: flex; }
+  .mobile-menu a {
+    font-family: var(--font-mono); font-size: 0.9rem; color: var(--text);
+    padding: 0.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.04);
+    letter-spacing: 0.1em;
+  }
+</style>
+</head>
+<body>
+<div class="scanline"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">VOIDX</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#games">Games</a></li>
+    <li><a href="#stats">Stats</a></li>
+    <li><a href="#achievements">Trophies</a></li>
+    <li><a href="#tournaments">Tournaments</a></li>
+    <li><a href="#schedule">Stream</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Contact</a>
+  <div class="hamburger" onclick="toggleMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#about" onclick="closeMenu()">About</a>
+  <a href="#games" onclick="closeMenu()">Games</a>
+  <a href="#stats" onclick="closeMenu()">Stats</a>
+  <a href="#achievements" onclick="closeMenu()">Achievements</a>
+  <a href="#tournaments" onclick="closeMenu()">Tournaments</a>
+  <a href="#schedule" onclick="closeMenu()">Stream Schedule</a>
+  <a href="#contact" onclick="closeMenu()">Contact</a>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-left reveal">
+    <div class="hero-badge">LIVE · Ranked Challenger</div>
+    <h1 class="hero-tag">
+      VOID<span class="accent">XERO</span>
+    </h1>
+    <p class="hero-tagline">
+      <em>Pro FPS · Tactical IGL · Content Creator</em><br>
+      Turning milliseconds into victories since 2017.
+    </p>
+    <div class="hero-actions">
+      <a href="#stats" class="btn-primary">View Stats</a>
+      <a href="#schedule" class="btn-outline">Watch Live</a>
+    </div>
+  </div>
+  <div class="hero-right reveal">
+    <div class="hero-avatar-ring">
+      <div class="hero-avatar">
+        <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="50" cy="35" r="18" fill="rgba(168,85,247,0.4)" stroke="rgba(0,212,255,0.5)" stroke-width="1.5"/>
+          <path d="M20 85 Q20 60 50 60 Q80 60 80 85" fill="rgba(0,212,255,0.25)" stroke="rgba(0,212,255,0.5)" stroke-width="1.5"/>
+          <polygon points="50,10 58,28 78,28 62,40 68,58 50,46 32,58 38,40 22,28 42,28" fill="none" stroke="rgba(245,200,66,0.4)" stroke-width="1"/>
+        </svg>
+      </div>
+    </div>
+    <div class="hero-stats-float">
+      <div class="stat-chip">
+        <div class="stat-group">
+          <span class="val">4.7</span>
+          <span class="lbl">K/D Ratio</span>
+        </div>
+      </div>
+      <div class="stat-chip">
+        <div class="stat-group">
+          <span class="val">87%</span>
+          <span class="lbl">Win Rate</span>
+        </div>
+      </div>
+      <div class="stat-chip">
+        <div class="stat-group">
+          <span class="val">#12</span>
+          <span class="lbl">Global Rank</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="neon-divider"></div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-label">01 · Identity</div>
+  <h2 class="section-title">About <span>Me</span></h2>
+  <div class="about-grid">
+    <div class="glass about-card reveal" data-num="01">
+      <h3>Origin Story</h3>
+      <p>Started on a <strong>PS2 with borrowed controllers</strong> at age 8. By 16, I was competing in regional LANs. By 21, I turned pro. Now I play to <strong>dominate and create</strong> — sharing every technique, every loss, every championship run.</p>
+    </div>
+    <div class="glass about-card reveal" data-num="02">
+      <h3>The Mindset</h3>
+      <p>Gaming isn't just reflex — it's <strong>pattern recognition, map theory, mental composure</strong>. I study replays like film, run drills like an athlete, and keep a game journal. Every match is data. Every death is tuition.</p>
+    </div>
+    <div class="glass about-card reveal" data-num="03">
+      <h3>Off the Grid</h3>
+      <p>When I'm AFK: <strong>Brazilian Jiu-Jitsu, film noir, and building custom keyboards</strong>. The discipline from BJJ transferred directly to staying calm in 1v5 clutch situations. The keyboards? That's just an addiction.</p>
+    </div>
+    <div class="glass about-card reveal" data-num="04">
+      <h3>Creator Mission</h3>
+      <p>I stream to <strong>demystify high-level play</strong> — no gatekeeping, no ego, just raw strategy breakdowns. 340K+ subscribers. 2M monthly viewers. Building the most honest FPS education channel on the internet.</p>
+    </div>
+  </div>
+</section>
+
+<div class="neon-divider"></div>
+
+<!-- GAMES -->
+<section id="games">
+  <div class="section-label">02 · Arsenal</div>
+  <h2 class="section-title">Favorite <span>Games</span></h2>
+  <div class="games-grid">
+    <div class="glass game-card reveal">
+      <div class="game-icon">⚡</div>
+      <div class="game-name">Valorant</div>
+      <div class="game-rank">Radiant — Top 12 NA</div>
+      <div class="game-hours">3,847 hrs</div>
+    </div>
+    <div class="glass game-card reveal">
+      <div class="game-icon">🎯</div>
+      <div class="game-name">CS2</div>
+      <div class="game-rank">Global Elite</div>
+      <div class="game-hours">5,210 hrs</div>
+    </div>
+    <div class="glass game-card reveal">
+      <div class="game-icon">🌀</div>
+      <div class="game-name">Apex Legends</div>
+      <div class="game-rank">Predator</div>
+      <div class="game-hours">1,920 hrs</div>
+    </div>
+    <div class="glass game-card reveal">
+      <div class="game-icon">🔮</div>
+      <div class="game-name">Overwatch 2</div>
+      <div class="game-rank">Top 500</div>
+      <div class="game-hours">2,100 hrs</div>
+    </div>
+    <div class="glass game-card reveal">
+      <div class="game-icon">🛡️</div>
+      <div class="game-name">Elden Ring</div>
+      <div class="game-rank">All Platinum</div>
+      <div class="game-hours">680 hrs</div>
+    </div>
+    <div class="glass game-card reveal">
+      <div class="game-icon">🚀</div>
+      <div class="game-name">Escape from Tarkov</div>
+      <div class="game-rank">Kappa</div>
+      <div class="game-hours">1,340 hrs</div>
+    </div>
+  </div>
+</section>
+
+<div class="neon-divider"></div>
+
+<!-- STATS -->
+<section id="stats">
+  <div class="section-label">03 · Numbers</div>
+  <h2 class="section-title">Gaming <span>Statistics</span></h2>
+  <div class="stats-main">
+    <div class="glass stat-big reveal">
+      <div class="num" data-target="4.7" data-decimal="1">0</div>
+      <span class="unit">avg</span>
+      <div class="label">K/D Ratio</div>
+    </div>
+    <div class="glass stat-big reveal">
+      <div class="num" data-target="87" data-decimal="0">0</div>
+      <span class="unit">%</span>
+      <div class="label">Win Rate</div>
+    </div>
+    <div class="glass stat-big reveal">
+      <div class="num" data-target="15100" data-decimal="0">0</div>
+      <span class="unit">total</span>
+      <div class="label">Hours Played</div>
+    </div>
+    <div class="glass stat-big reveal">
+      <div class="num" data-target="2847" data-decimal="0">0</div>
+      <span class="unit">career</span>
+      <div class="label">Ranked Wins</div>
+    </div>
+  </div>
+  <div class="stats-bars">
+    <div class="glass bar-row reveal">
+      <div class="bar-header"><span class="bar-label">Headshot Rate</span><span class="bar-val">74%</span></div>
+      <div class="bar-track"><div class="bar-fill" style="width:74%"></div></div>
+    </div>
+    <div class="glass bar-row reveal">
+      <div class="bar-header"><span class="bar-label">Clutch Conversion</span><span class="bar-val">61%</span></div>
+      <div class="bar-track"><div class="bar-fill" style="width:61%"></div></div>
+    </div>
+    <div class="glass bar-row reveal">
+      <div class="bar-header"><span class="bar-label">First Blood Rate</span><span class="bar-val">58%</span></div>
+      <div class="bar-track"><div class="bar-fill" style="width:58%"></div></div>
+    </div>
+    <div class="glass bar-row reveal">
+      <div class="bar-header"><span class="bar-label">KAST Score</span><span class="bar-val">82%</span></div>
+      <div class="bar-track"><div class="bar-fill" style="width:82%"></div></div>
+    </div>
+    <div class="glass bar-row reveal">
+      <div class="bar-header"><span class="bar-label">Average Damage/Round</span><span class="bar-val">168</span></div>
+      <div class="bar-track"><div class="bar-fill" style="width:84%"></div></div>
+    </div>
+    <div class="glass bar-row reveal">
+      <div class="bar-header"><span class="bar-label">Entry Frag Success</span><span class="bar-val">69%</span></div>
+      <div class="bar-track"><div class="bar-fill" style="width:69%"></div></div>
+    </div>
+  </div>
+</section>
+
+<div class="neon-divider"></div>
+
+<!-- ACHIEVEMENTS -->
+<section id="achievements">
+  <div class="section-label">04 · Trophies</div>
+  <h2 class="section-title">Achievements & <span>Trophies</span></h2>
+  <div class="ach-grid">
+    <div class="glass ach-card reveal">
+      <div class="ach-icon platinum">👑</div>
+      <div class="ach-text">
+        <h4>Radiant Ascent</h4>
+        <p>Reached #1 Radiant in Valorant NA for 3 consecutive seasons.</p>
+        <div class="ach-rarity rarity-platinum">★ Platinum · 0.01% players</div>
+      </div>
+    </div>
+    <div class="glass ach-card reveal">
+      <div class="ach-icon">🏆</div>
+      <div class="ach-text">
+        <h4>VCT Champion</h4>
+        <p>Won the Valorant Champions Tour 2024 NA Qualifier with Team Void.</p>
+        <div class="ach-rarity rarity-gold">★ Gold · Tournament Win</div>
+      </div>
+    </div>
+    <div class="glass ach-card reveal">
+      <div class="ach-icon rare">⚡</div>
+      <div class="ach-text">
+        <h4>Lightning Reflex</h4>
+        <p>Averaged sub-160ms reaction time in 1000+ verified trials.</p>
+        <div class="ach-rarity rarity-rare">★ Rare · Top 0.1%</div>
+      </div>
+    </div>
+    <div class="glass ach-card reveal">
+      <div class="ach-icon">💀</div>
+      <div class="ach-text">
+        <h4>1v5 Legend</h4>
+        <p>Clutched 1v5 situations 47 times in ranked and tournament play.</p>
+        <div class="ach-rarity rarity-gold">★ Gold · Legendary</div>
+      </div>
+    </div>
+    <div class="glass ach-card reveal">
+      <div class="ach-icon platinum">🌀</div>
+      <div class="ach-text">
+        <h4>Apex Predator S20</h4>
+        <p>Solo-queued to Apex Predator rank in Season 20 from Gold IV.</p>
+        <div class="ach-rarity rarity-platinum">★ Platinum · Solo Grind</div>
+      </div>
+    </div>
+    <div class="glass ach-card reveal">
+      <div class="ach-icon rare">📺</div>
+      <div class="ach-text">
+        <h4>100K Live Concurrent</h4>
+        <p>Peaked 100,000+ live viewers during the VCT finals co-stream.</p>
+        <div class="ach-rarity rarity-rare">★ Rare · Creator Milestone</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="neon-divider"></div>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-label">05 · Playstyle</div>
+  <h2 class="section-title">Skills & <span>Playstyle</span></h2>
+  <div class="skills-layout">
+    <div class="reveal">
+      <div class="playstyle-tags">
+        <span class="tag tag-blue">Entry Fragger</span>
+        <span class="tag tag-purple">In-Game Leader</span>
+        <span class="tag tag-pink">Lurker</span>
+        <span class="tag tag-blue">Sniper</span>
+        <span class="tag tag-purple">Flex</span>
+        <span class="tag tag-pink">Strategist</span>
+        <span class="tag tag-blue">Clutch Player</span>
+      </div>
+      <div class="skill-list">
+        <div class="skill-item">
+          <div class="skill-header"><span class="skill-name">Aim &amp; Crosshair Placement</span><span class="skill-pct">97%</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:97%"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-header"><span class="skill-name">Game Sense &amp; Map Control</span><span class="skill-pct">94%</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:94%"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-header"><span class="skill-name">Communication &amp; IGL</span><span class="skill-pct">90%</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:90%"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-header"><span class="skill-name">Utility / Ability Usage</span><span class="skill-pct">88%</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:88%"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-header"><span class="skill-name">Mental Fortitude</span><span class="skill-pct">92%</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:92%"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-header"><span class="skill-name">Economy Management</span><span class="skill-pct">85%</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:85%"></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="radar-wrap reveal">
+      <svg viewBox="0 0 260 260" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="rg" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="rgba(168,85,247,0.3)"/>
+            <stop offset="100%" stop-color="rgba(0,212,255,0.05)"/>
+          </radialGradient>
+        </defs>
+        <!-- Radar grid -->
+        <g transform="translate(130,130)">
+          <!-- Rings -->
+          <polygon points="0,-100 86.6,-50 86.6,50 0,100 -86.6,50 -86.6,-50" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
+          <polygon points="0,-75 64.95,-37.5 64.95,37.5 0,75 -64.95,37.5 -64.95,-37.5" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+          <polygon points="0,-50 43.3,-25 43.3,25 0,50 -43.3,25 -43.3,-25" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+          <polygon points="0,-25 21.65,-12.5 21.65,12.5 0,25 -21.65,12.5 -21.65,-12.5" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+          <!-- Axes -->
+          <line x1="0" y1="0" x2="0" y2="-100" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+          <line x1="0" y1="0" x2="86.6" y2="-50" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+          <line x1="0" y1="0" x2="86.6" y2="50" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+          <line x1="0" y1="0" x2="0" y2="100" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+          <line x1="0" y1="0" x2="-86.6" y2="50" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+          <line x1="0" y1="0" x2="-86.6" y2="-50" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+          <!-- Data (scaled: 97%,94%,90%,88%,92%,85% of 100) -->
+          <polygon
+            points="0,-97 83.9,-47 79.8,45 0,88 -79.7,46 -73.2,-48.5"
+            fill="url(#rg)"
+            stroke="url(#lg1)"
+            stroke-width="2"
+          />
+          <!-- Dots -->
+          <circle cx="0" cy="-97" r="4" fill="#00d4ff"/>
+          <circle cx="83.9" cy="-47" r="4" fill="#a855f7"/>
+          <circle cx="79.8" cy="45" r="4" fill="#ff2d78"/>
+          <circle cx="0" cy="88" r="4" fill="#00d4ff"/>
+          <circle cx="-79.7" cy="46" r="4" fill="#a855f7"/>
+          <circle cx="-73.2" cy="-48.5" r="4" fill="#ff2d78"/>
+          <!-- Labels -->
+          <text x="0" y="-112" text-anchor="middle" fill="rgba(200,204,232,0.7)" font-size="10" font-family="Share Tech Mono">AIM</text>
+          <text x="98" y="-54" text-anchor="start" fill="rgba(200,204,232,0.7)" font-size="10" font-family="Share Tech Mono">SENSE</text>
+          <text x="94" y="56" text-anchor="start" fill="rgba(200,204,232,0.7)" font-size="10" font-family="Share Tech Mono">COMMS</text>
+          <text x="0" y="118" text-anchor="middle" fill="rgba(200,204,232,0.7)" font-size="10" font-family="Share Tech Mono">UTIL</text>
+          <text x="-96" y="56" text-anchor="end" fill="rgba(200,204,232,0.7)" font-size="10" font-family="Share Tech Mono">MENTAL</text>
+          <text x="-96" y="-54" text-anchor="end" fill="rgba(200,204,232,0.7)" font-size="10" font-family="Share Tech Mono">ECO</text>
+        </g>
+        <defs>
+          <linearGradient id="lg1" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#00d4ff"/>
+            <stop offset="100%" stop-color="#a855f7"/>
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<div class="neon-divider"></div>
+
+<!-- SETUP -->
+<section id="setup">
+  <div class="section-label">06 · Rig</div>
+  <h2 class="section-title">Gaming <span>Setup</span></h2>
+  <div class="setup-grid">
+    <div class="glass setup-item reveal">
+      <div class="setup-cat">CPU</div>
+      <div class="setup-name">Intel i9-14900KS</div>
+      <div class="setup-spec">6.2GHz Boost · 24 Cores · 360W TDP</div>
+    </div>
+    <div class="glass setup-item reveal">
+      <div class="setup-cat">GPU</div>
+      <div class="setup-name">NVIDIA RTX 5090</div>
+      <div class="setup-spec">24GB GDDR7 · PCIe 5.0 · 575W</div>
+    </div>
+    <div class="glass setup-item reveal">
+      <div class="setup-cat">Monitor</div>
+      <div class="setup-name">ASUS ROG Swift 360Hz</div>
+      <div class="setup-spec">1440p · IPS · 0.3ms GtG · HDR600</div>
+    </div>
+    <div class="glass setup-item reveal">
+      <div class="setup-cat">Mouse</div>
+      <div class="setup-name">Logitech G Pro X 2</div>
+      <div class="setup-spec">HERO 25K Sensor · 60g · 400IPS</div>
+    </div>
+    <div class="glass setup-item reveal">
+      <div class="setup-cat">Keyboard</div>
+      <div class="setup-name">Custom 60% (GMK CYL)</div>
+      <div class="setup-spec">Holy Pandas · HHKB layout · Brass plate</div>
+    </div>
+    <div class="glass setup-item reveal">
+      <div class="setup-cat">Headset</div>
+      <div class="setup-name">Audio-Technica ATH-M50X</div>
+      <div class="setup-spec">Modmic 5 · 45mm drivers · Closed-back</div>
+    </div>
+    <div class="glass setup-item reveal">
+      <div class="setup-cat">Chair</div>
+      <div class="setup-name">Herman Miller Embody</div>
+      <div class="setup-spec">Gaming edition · Lumbar support · 12yr warranty</div>
+    </div>
+    <div class="glass setup-item reveal">
+      <div class="setup-cat">RAM</div>
+      <div class="setup-name">G.Skill Trident Z5 64GB</div>
+      <div class="setup-spec">DDR5-6400 · CL30 · RGB</div>
+    </div>
+  </div>
+</section>
+
+<div class="neon-divider"></div>
+
+<!-- GALLERY -->
+<section id="gallery">
+  <div class="section-label">07 · Screenshots</div>
+  <h2 class="section-title">Gallery / <span>Screenshots</span></h2>
+  <div class="gallery-grid">
+    <div class="gallery-item reveal">
+      <div class="gallery-thumb">🏆<span>VCT Finals Moment</span></div>
+      <div class="gallery-overlay"><p>VCT NA Qualifier — Game 5 Clutch</p></div>
+    </div>
+    <div class="gallery-item reveal">
+      <div class="gallery-thumb">⚡<span>Ace in 4 seconds</span></div>
+      <div class="gallery-overlay"><p>Fastest Ace — Valorant Ranked</p></div>
+    </div>
+    <div class="gallery-item reveal">
+      <div class="gallery-thumb">🎯<span>250-0 KD Match</span></div>
+      <div class="gallery-overlay"><p>CS2 · No-death perfecto</p></div>
+    </div>
+    <div class="gallery-item reveal">
+      <div class="gallery-thumb">🌀<span>Predator LP</span></div>
+      <div class="gallery-overlay"><p>Apex Legends — Solo Predator</p></div>
+    </div>
+    <div class="gallery-item reveal">
+      <div class="gallery-thumb">💀<span>1v5 Clutch</span></div>
+      <div class="gallery-overlay"><p>1v5 Defuse Clutch — OT</p></div>
+    </div>
+    <div class="gallery-item reveal">
+      <div class="gallery-thumb">🎮<span>Stream Desk</span></div>
+      <div class="gallery-overlay"><p>Setup Tour — July 2025</p></div>
+    </div>
+    <div class="gallery-item reveal">
+      <div class="gallery-thumb">🌐<span>Team Photo</span></div>
+      <div class="gallery-overlay"><p>Team Void — Roster 2025</p></div>
+    </div>
+  </div>
+</section>
+
+<div class="neon-divider"></div>
+
+<!-- TOURNAMENTS -->
+<section id="tournaments">
+  <div class="section-label">08 · History</div>
+  <h2 class="section-title">Tournament <span>History</span></h2>
+  <div class="tourney-list">
+    <div class="glass tourney-row reveal">
+      <div class="tourney-place place-1">1ST</div>
+      <div><div class="tourney-name">VCT NA Qualifier 2025</div><div class="tourney-game">Valorant · 32-team bracket</div></div>
+      <div class="tourney-date">Mar 2025</div>
+      <div class="tourney-prize">$25,000</div>
+    </div>
+    <div class="glass tourney-row reveal">
+      <div class="tourney-place place-2">2ND</div>
+      <div><div class="tourney-name">ESL Pro League S21</div><div class="tourney-game">CS2 · Invitational · 16 teams</div></div>
+      <div class="tourney-date">Nov 2024</div>
+      <div class="tourney-prize">$12,000</div>
+    </div>
+    <div class="glass tourney-row reveal">
+      <div class="tourney-place place-1">1ST</div>
+      <div><div class="tourney-name">ALGS Pro League S4</div><div class="tourney-game">Apex Legends · 20-team · Regional</div></div>
+      <div class="tourney-date">Aug 2024</div>
+      <div class="tourney-prize">$18,000</div>
+    </div>
+    <div class="glass tourney-row reveal">
+      <div class="tourney-place place-3">3RD</div>
+      <div><div class="tourney-name">IEM Katowice 2024</div><div class="tourney-game">CS2 · 24-team · Major Qualifier</div></div>
+      <div class="tourney-date">Feb 2024</div>
+      <div class="tourney-prize">$6,000</div>
+    </div>
+    <div class="glass tourney-row reveal">
+      <div class="tourney-place place-1">1ST</div>
+      <div><div class="tourney-name">NSG Winter Championship</div><div class="tourney-game">Valorant · Open bracket</div></div>
+      <div class="tourney-date">Jan 2024</div>
+      <div class="tourney-prize">$4,000</div>
+    </div>
+    <div class="glass tourney-row reveal">
+      <div class="tourney-place place-x">5TH</div>
+      <div><div class="tourney-name">VCT Champions 2023</div><div class="tourney-game">Valorant · Global Championship</div></div>
+      <div class="tourney-date">Aug 2023</div>
+      <div class="tourney-prize">$50,000</div>
+    </div>
+  </div>
+</section>
+
+<div class="neon-divider"></div>
+
+<!-- SCHEDULE -->
+<section id="schedule">
+  <div class="section-label">09 · Stream</div>
+  <h2 class="section-title">Stream <span>Schedule</span></h2>
+  <div class="schedule-grid">
+    <div class="glass day-card reveal">
+      <div class="day-name">Mon</div>
+      <div class="day-time">—</div>
+      <div class="day-game">Off day</div>
+      <div class="day-dot dot-off"></div>
+    </div>
+    <div class="glass day-card active reveal">
+      <div class="day-name">Tue</div>
+      <div class="day-time">8PM EST</div>
+      <div class="day-game">Ranked Grind</div>
+      <div class="day-dot dot-on"></div>
+    </div>
+    <div class="glass day-card active reveal">
+      <div class="day-name">Wed</div>
+      <div class="day-time">7PM EST</div>
+      <div class="day-game">VOD Review</div>
+      <div class="day-dot dot-on"></div>
+    </div>
+    <div class="glass day-card reveal">
+      <div class="day-name">Thu</div>
+      <div class="day-time">—</div>
+      <div class="day-game">Training</div>
+      <div class="day-dot dot-off"></div>
+    </div>
+    <div class="glass day-card active reveal">
+      <div class="day-name">Fri</div>
+      <div class="day-time">9PM EST</div>
+      <div class="day-game">Variety Night</div>
+      <div class="day-dot dot-on"></div>
+    </div>
+    <div class="glass day-card active reveal">
+      <div class="day-name">Sat</div>
+      <div class="day-time">6PM EST</div>
+      <div class="day-game">Marathon</div>
+      <div class="day-dot dot-on"></div>
+    </div>
+    <div class="glass day-card active reveal">
+      <div class="day-name">Sun</div>
+      <div class="day-time">5PM EST</div>
+      <div class="day-game">Scrims Live</div>
+      <div class="day-dot dot-on"></div>
+    </div>
+  </div>
+  <div class="stream-info">
+    <div class="stream-badge"><div class="dot"></div>Live on Twitch: <strong>twitch.tv/voidxero</strong></div>
+    <div class="stream-badge">📺 VODs on YouTube: <strong>@VoidXeroGG</strong></div>
+    <div class="stream-badge">🔔 4.2K avg viewers</div>
+  </div>
+</section>
+
+<div class="neon-divider"></div>
+
+<!-- SOCIAL -->
+<section id="social">
+  <div class="section-label" style="justify-content:center">10 · Connect</div>
+  <h2 class="section-title" style="text-align:center">Social <span>Media</span></h2>
+  <div class="social-grid">
+    <div class="glass social-card reveal">
+      <div class="social-icon">🎮</div>
+      <div class="social-name">Twitch</div>
+      <div class="social-handle">@voidxero</div>
+    </div>
+    <div class="glass social-card reveal">
+      <div class="social-icon">▶️</div>
+      <div class="social-name">YouTube</div>
+      <div class="social-handle">@VoidXeroGG</div>
+    </div>
+    <div class="glass social-card reveal">
+      <div class="social-icon">🐦</div>
+      <div class="social-name">X / Twitter</div>
+      <div class="social-handle">@voidxero_</div>
+    </div>
+    <div class="glass social-card reveal">
+      <div class="social-icon">📸</div>
+      <div class="social-name">Instagram</div>
+      <div class="social-handle">@voidxero.gg</div>
+    </div>
+    <div class="glass social-card reveal">
+      <div class="social-icon">💬</div>
+      <div class="social-name">Discord</div>
+      <div class="social-handle">VOID Server</div>
+    </div>
+    <div class="glass social-card reveal">
+      <div class="social-icon">🎵</div>
+      <div class="social-name">TikTok</div>
+      <div class="social-handle">@voidxero</div>
+    </div>
+  </div>
+</section>
+
+<div class="neon-divider"></div>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-label">11 · Comm</div>
+  <h2 class="section-title">Get In <span>Touch</span></h2>
+  <div class="contact-inner">
+    <p style="color:var(--muted);font-family:var(--font-mono);font-size:0.85rem;margin-bottom:2rem;line-height:1.7;">
+      For sponsorships, collabs, team inquiries, or coaching sessions — hit me up. Response within 24–48 hours. No spam, no DM farming.
+    </p>
+    <div class="contact-form">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Name</label>
+          <input type="text" placeholder="Your name">
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" placeholder="your@email.com">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Inquiry Type</label>
+        <select>
+          <option>Sponsorship / Brand Deal</option>
+          <option>Coaching Session</option>
+          <option>Team / Roster Inquiry</option>
+          <option>Media / Press</option>
+          <option>Collaboration</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Message</label>
+        <textarea placeholder="What's on your mind?"></textarea>
+      </div>
+      <button class="btn-primary" style="align-self:flex-start" onclick="handleSubmit(this)">Transmit Message</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">VOIDX</div>
+  <div class="footer-copy">© 2026 VoidXero. All rights reserved.</div>
+  <div class="footer-glyph">GG · OR · DIE</div>
+</footer>
+
+<script>
+  // Mobile menu
+  function toggleMenu() {
+    document.getElementById('mobileMenu').classList.toggle('open');
+  }
+  function closeMenu() {
+    document.getElementById('mobileMenu').classList.remove('open');
+  }
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 60);
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+
+  // Counter animation
+  function animateCounter(el) {
+    const target = parseFloat(el.dataset.target);
+    const dec = parseInt(el.dataset.decimal || '0');
+    const dur = 1600;
+    const start = performance.now();
+    function step(now) {
+      const t = Math.min((now - start) / dur, 1);
+      const ease = 1 - Math.pow(1 - t, 3);
+      const val = target * ease;
+      el.textContent = dec === 0 ? Math.round(val).toLocaleString() : val.toFixed(dec);
+      if (t < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+  const statNums = document.querySelectorAll('.num[data-target]');
+  const numObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { animateCounter(e.target); numObserver.unobserve(e.target); }
+    });
+  }, { threshold: 0.5 });
+  statNums.forEach(el => numObserver.observe(el));
+
+  // Contact submit
+  function handleSubmit(btn) {
+    btn.textContent = 'Transmitted ✓';
+    btn.style.background = 'linear-gradient(135deg,#22c55e,#16a34a)';
+    btn.style.boxShadow = '0 0 24px rgba(34,197,94,0.4)';
+    btn.disabled = true;
+  }
+</script>
+</body>
+</html>
