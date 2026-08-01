@@ -17,7 +17,7 @@
         box-sizing: border-box;
       }
       body {
-        background: white;
+        background: black;
         color: white;
         min-height: 100vh;
         text-align: center;
@@ -25,7 +25,7 @@
       
         header { 
            
-           color: black;
+           color: white;
            padding: 20px;
            text-align: center;
            font: Montserrat,sans-serif;
@@ -49,11 +49,51 @@
         color: black;
         text-decoration: none;
       }
+      .one {
+        height: 100px;
+        width: 100px;
+        border: 0px solid black;
+        background: red;
+        margin-left: 10px;
+        animation: roll 2s linear 0.5s infinite alternate both running;
+      }
+      .two {
+        height: 100px;
+        width: 100px;
+        border: 0px solid black;
+        background: yellow;
+        margin-left: 10px;
+        animation: roll 2s linear 1s infinite alternate both running;
+      }
+      .three {
+        height: 100px;
+        width: 100px;
+        border: 0px solid black;
+        background: green;
+        margin-left: 10px;
+        animation: roll 2s linear 1.5s infinite alternate both running;
+      }
+      @keyframes roll {
+        from {
+          margin-left: 10px;
+          transform: rotate(0deg);
+        }
+        to {
+          margin-left: 250px;
+          transform: rotate(360deg);
+          /*border-radius: 50%;*/
+        }
+      }
     </style>
     <body>
       <header>
-        <h1>Void</h1>
+        <h1>Traffic Light</h1>
       </header>
+      <div class="one"></div>
+      <br>
+      <div class="two"></div>
+      <br>
+      <div class="three"></div>
       <nav class="btn">
         <a href= "https://x.com/SumanGaming20" >Twitter</a>
         </nav>
